@@ -10,8 +10,7 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('djoser.urls')),
-    path('api/', include('djoser.urls.jwt')),
+    path('api/', include('apps.users.urls')),
     path('api/', include(router.urls)),
 ]
 

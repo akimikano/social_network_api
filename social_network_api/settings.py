@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     # myapps
-    'apps.user',
+    'apps.users',
     'apps.main',
 ]
 
@@ -37,6 +37,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_network_api.middlewares.users.LastRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'social_network_api.urls'
@@ -65,6 +66,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+AUTH_USER_MODEL = 'users.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -118,8 +121,8 @@ PASSWORD_RESET_CONFIRM_URL = 'api/users/password_reset_confirm/'
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': PASSWORD_RESET_CONFIRM_URL,
     'SERIALIZERS': {
-        'user_create': 'apps.user.serializers.UserCreateSerializer',
-        'current_user': 'apps.user.serializers.UserSerializer',
+        'user_create': 'apps.users.serializers.UserCreateSerializer',
+        'current_user': 'apps.users.serializers.UserSerializer',
     },
 }
 
