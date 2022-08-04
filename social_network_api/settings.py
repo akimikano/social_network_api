@@ -4,9 +4,9 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-t9b$(7r(acoum@i49b3qu11#v(@io7xsasq=l&_$w79xmdhi(p')
+SECRET_KEY = os.environ.get('SECRET_KEY', '37%!xab!8df6wl86d!h!&lu7e70%ai(jax7&t0&ubqm=%^nvxt')
 
-DEBUG = os.getenv('DEBUG', True)
+DEBUG = os.environ.get('DEBUG', True)
 
 ALLOWED_HOSTS = ['*']
 
@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     # myapps
-    'apps.user',
+    'apps.users',
     'apps.main',
 ]
 
@@ -37,6 +37,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'middleware.users.LastRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'social_network_api.urls'
@@ -65,6 +66,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+AUTH_USER_MODEL = 'users.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -95,20 +98,25 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'EXCEPTION_HANDLER': 'middleware.handlers.custom_exception_handler',
+    'DEFAULT_RENDERER_CLASSES': [
+        'middleware.renderers.ResponseRenderer'
+    ],
+
 }
 
 # simple jwt
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # access token lifetime increased for simpler manual testing
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True
 }
 
-EMAIL_HOST = os.getenv('EMAIL_HOST', '')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'instance@gmail.com')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'emailpassword123')
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
 EMAIL_USE_TLS = True
 
 # djoser
@@ -118,8 +126,8 @@ PASSWORD_RESET_CONFIRM_URL = 'api/users/password_reset_confirm/'
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': PASSWORD_RESET_CONFIRM_URL,
     'SERIALIZERS': {
-        'user_create': 'apps.user.serializers.UserCreateSerializer',
-        'current_user': 'apps.user.serializers.UserSerializer',
+        'user_create': 'apps.users.serializers.UserCreateSerializer',
+        'current_user': 'apps.users.serializers.UserBasicSerializer',
     },
 }
 
@@ -128,4 +136,6 @@ PERMISSIONS = {
     'user': ['rest_framework.permissions.IsAdminUser'],
     'user_list': ['rest_framework.permissions.IsAdminUser'],
 }
+
+from .prod_settings import *
 
