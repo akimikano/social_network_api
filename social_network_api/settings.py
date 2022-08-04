@@ -4,9 +4,9 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-t9b$(7r(acoum@i49b3qu11#v(@io7xsasq=l&_$w79xmdhi(p')
+SECRET_KEY = os.environ.get('SECRET_KEY', '37%!xab!8df6wl86d!h!&lu7e70%ai(jax7&t0&ubqm=%^nvxt')
 
-DEBUG = os.getenv('DEBUG', True)
+DEBUG = os.environ.get('DEBUG', True)
 
 ALLOWED_HOSTS = ['*']
 
@@ -107,16 +107,16 @@ REST_FRAMEWORK = {
 
 # simple jwt
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # access token lifetime increased for simpler manual testing
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True
 }
 
-EMAIL_HOST = os.getenv('EMAIL_HOST', '')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'instance@gmail.com')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'emailpassword123')
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
 EMAIL_USE_TLS = True
 
 # djoser
@@ -136,4 +136,6 @@ PERMISSIONS = {
     'user': ['rest_framework.permissions.IsAdminUser'],
     'user_list': ['rest_framework.permissions.IsAdminUser'],
 }
+
+from .prod_settings import *
 
