@@ -47,5 +47,6 @@ def increment_likes_count(sender, created, instance, **kwargs):
 @receiver(pre_delete, sender=Like)
 def decrement_likes_count(instance, **kwargs):
     analytic, created = Analytic.objects.get_or_create(post=instance.post, date=timezone.now())
-    analytic.likes_count -= 1
+    if not created:
+        analytic.likes_count -= 1
     analytic.save()

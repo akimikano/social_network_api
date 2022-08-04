@@ -14,6 +14,8 @@ from rest_framework import (
     permissions,
     status
 )
+
+from apps.main.permissions import IsOwnerOrReadOnly
 from apps.main.serializers import (
     PostListSerializer,
     PostDetailSerializer,
@@ -24,10 +26,10 @@ from apps.main.serializers import (
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.select_related('user').prefetch_related('like_set').filter(is_archived=False)
     serializer_class = PostListSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_serializer_class(self):
-        if self.action in ['create', 'update',]:
+        if self.action in ['create', 'update']:
             return PostDetailSerializer
         else:
             return PostListSerializer
