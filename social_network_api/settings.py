@@ -122,7 +122,7 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': PASSWORD_RESET_CONFIRM_URL,
     'SERIALIZERS': {
         'user_create': 'apps.users.serializers.UserCreateSerializer',
-        'current_user': 'apps.users.serializers.UserSerializer',
+        'current_user': 'apps.users.serializers.UserBasicSerializer',
     },
 }
 

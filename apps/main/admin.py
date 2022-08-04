@@ -1,7 +1,8 @@
 from django.contrib import admin
 from apps.main.models import (
     Post,
-    Like
+    Like,
+    Analytic
 )
 
 
@@ -15,3 +16,4 @@ class LikeAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Like, LikeAdmin)
+admin.site.register(Analytic)
